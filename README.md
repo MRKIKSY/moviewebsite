@@ -1,3 +1,86 @@
+// API URLs for fetching movie data
+const APIURL = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1";
+const IMGPATH = "https://image.tmdb.org/t/p/w1280";
+const SEARCHAPI = "https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=";
+
+// HTML elements
+const main = document.getElementById("main");
+const form = document.getElementById("form");
+const search = document.getElementById("search");
+
+// Initially get popular movies
+getMovies(APIURL);
+
+// Async function to fetch and handle movie data
+async function getMovies(url) {
+  const resp = await fetch(url);
+  const respData = await resp.json();
+
+  // Log the fetched movie data
+  console.log(respData);
+
+  // Display the movies on the webpage
+  showMovies(respData.results);
+}
+
+// Function to display movies on the webpage
+function showMovies(movies) {
+  // Clear the main container
+  main.innerHTML = "";
+
+  // Iterate through each movie and create HTML elements to display them
+  movies.forEach((movie) => {
+    const { poster_path, title, vote_average, overview } = movie;
+
+    // Create a div element for each movie
+    const movieEl = document.createElement("div");
+    movieEl.classList.add("movie");
+
+    // Populate the div with movie information
+    movieEl.innerHTML = `
+      <img src="${IMGPATH + poster_path}" alt="${title}"/>
+      <div class="movie-info">
+        <h3>${title}</h3>
+        <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+      </div> 
+      <div class="overview">
+        <h2>Overview:</h2>
+        ${overview}
+      </div>
+    `;
+
+    // Append the movie element to the main container
+    main.appendChild(movieEl);
+  });
+}
+
+// Function to determine the CSS class based on the movie rating
+function getClassByRate(vote) {
+  if (vote >= 8) {
+    return 'green';
+  } else if (vote >= 5) {
+    return 'orange';
+  } else {
+    return 'red';
+  }
+}
+
+// Event listener for the form submission (search)
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // Get the search term from the input field
+  const searchTerm = search.value;
+
+  // If a search term is provided, fetch and display the corresponding movies
+  if (searchTerm) {
+    getMovies(SEARCHAPI + searchTerm);
+    search.value = "";
+  }
+});
+
+
+
 
 Certainly! Let's break down the provided JavaScript code line by line:
 
