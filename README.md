@@ -80,7 +80,7 @@ form.addEventListener("submit", (e) => {
 });
 
 
-
+END OF CODEEEEEE
 
 Certainly! Let's break down the provided JavaScript code line by line:
 
